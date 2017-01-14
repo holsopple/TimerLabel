@@ -1,7 +1,4 @@
 ﻿using System;
-using bpac;
-using System.Diagnostics;
-using System.Configuration;
 
 
 namespace com.holsopple.BrotherLabel
@@ -9,69 +6,54 @@ namespace com.holsopple.BrotherLabel
     class LabelProcess
     {
 
-        static String templatePath;
 
         static void Main(string[] args)
         {
 
-            if (args == null || args.Length != 4)
+            /*
+             *call from excel
+             *Shell ("C:\GaryStuff\norpca\timerlabel\brotherLabel.exe " + runTime + " " + personName + " " + runInstance + " " + entrantNum + " " + classCode + " " + netTime + " " + penaltyCount)
+             */
+
+
+            if (args == null || args.Length != 7)
             {
-                Console.WriteLine("hey, no data.");
+                Console.WriteLine("hey, not right data.");
                 return;
             }
 
-            String time = args[0];
-            String name = args[1];
+            String runTime = args[0];
+            String personName = args[1];
             String runInstance = args[2];
             String entrantNum = args[3];
+            String classCode = args[4];
+            String netTime = args[5];
+            String penaltyCount = args[6];
 
-            if (String.IsNullOrEmpty(time)
+            if (String.IsNullOrEmpty(runTime)
                 ||
-                String.IsNullOrEmpty(name))
+                String.IsNullOrEmpty(personName))
             {
                 Console.WriteLine("hey, no data.");
             }
 
-            LabelProcess label = new LabelProcess();
-            label.processPrint(time, name, runInstance, entrantNum);
 
+            // marshal the object
+            AutoCrossRun aRun = new AutoCrossRun();
+            aRun.NetTime = netTime;
+            aRun.PersonName = personName;
+            aRun.RunInstance = runInstance;
+            aRun.EntrantNum = entrantNum;
+            aRun.ClassCode = classCode;
+            aRun.NetTime = netTime;
+            aRun.PenaltyCount = penaltyCount;
 
-
-        }
-
-        private void processPrint(string time, string name, string runInstance, string entrantNum)
-        {
-            Boolean returnValue = false;
-
-            if (String.IsNullOrEmpty(templatePath))
-            {
-                // read the config
-                templatePath = ConfigurationManager.AppSettings["templatePath"];
-                Trace.TraceInformation("templatePath:" +  templatePath);
-
-            }
-
-            bpac.Document doc = new Document();
-            bpac.Printer printer = new Printer();
-            if (doc.Open(templatePath) != false)
-            {
-                doc.GetObject("objTime").Text = time;
-                doc.GetObject("objName").Text = name;
-                doc.GetObject("objRun").Text = runInstance;
-                doc.GetObject("objEntNum").Text = entrantNum;
-                
-                returnValue = doc.StartPrint("", PrintOptionConstants.bpoDefault);
-                Trace.TraceInformation("startProject:" + returnValue);
-
-                returnValue = doc.PrintOut(1, PrintOptionConstants.bpoDefault);
-                Trace.TraceInformation("printout:" + returnValue);
-
-                doc.EndPrint();
-                doc.Close();
-            }
-
+            aRun.postToTwitter();
+            aRun.processPrint();
 
         }
+
+
 
 
 
