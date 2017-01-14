@@ -1,0 +1,8 @@
+c:\users\gjh\documents\visual studio 2015\Projects\brotherLabel\brotherLabel\bin\Debug\brotherLabel.exe.config
+C:\Users\gjh\Documents\Visual Studio 2015\Projects\brotherLabel\brotherLabel\bin\Debug\brotherLabel.exe
+C:\Users\gjh\Documents\Visual Studio 2015\Projects\brotherLabel\brotherLabel\bin\Debug\brotherLabel.pdb
+C:\Users\gjh\Documents\Visual Studio 2015\Projects\brotherLabel\brotherLabel\obj\Debug\brotherLabel.csprojResolveAssemblyReference.cache
+C:\Users\gjh\Documents\Visual Studio 2015\Projects\brotherLabel\brotherLabel\obj\Debug\Interop.bpac.dll
+C:\Users\gjh\Documents\Visual Studio 2015\Projects\brotherLabel\brotherLabel\obj\Debug\brotherLabel.csproj.ResolveComReference.cache
+C:\Users\gjh\Documents\Visual Studio 2015\Projects\brotherLabel\brotherLabel\obj\Debug\brotherLabel.exe
+C:\Users\gjh\Documents\Visual Studio 2015\Projects\brotherLabel\brotherLabel\obj\Debug\brotherLabel.pdb
