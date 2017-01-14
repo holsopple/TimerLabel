@@ -1,0 +1,55 @@
+Option Explicit
+
+Public xfrLastCell As String
+Public xfrActiveCell As String
+Public xfrLastCellValue As String
+Public xfrActiveCellValue As String
+Public time As String
+Public personName As String
+Public runInstance As String
+Public entrantNum As String
+
+Dim x As Long
+
+Private Sub Worksheet_SelectionChange(ByVal Target As Excel.Range)
+
+
+' set up last cell
+    If xfrActiveCell = "" Then
+        xfrActiveCell = ActiveCell.Address
+        
+        End If
+    'save off prior values
+    xfrLastCell = xfrActiveCell
+    xfrLastCellValue = xfrActiveCellValue
+    
+    xfrActiveCellValue = ActiveCell.Value
+    xfrActiveCell = ActiveCell.Address
+    ''MsgBox xfrLastCell
+
+
+'   check if column name is "penalty"  , if so, move on. else return
+        If (Cells(1, Range(xfrLastCell).Column)) <> "P" Then
+            Exit Sub
+        Else
+            ' manage empty cells.
+            If IsEmpty(Range(xfrLastCell).Value) Then
+                Exit Sub
+            End If
+            
+            ' putting quotes around text.
+            personName = """" + Cells(Range(xfrLastCell).Row, 4) + ", " + Cells(Range(xfrLastCell).Row, 5) + """"
+            time = Cells(Range(xfrLastCell).Row, Range(xfrLastCell).Column + 1)
+            runInstance = """" + Cells(1, Range(xfrLastCell).Column - 1) + """"
+            entrantNum = Cells(Range(xfrLastCell).Row, 1)
+            
+            'MsgBox (personName + " " + time + " " + runInstance + " " + entrantNum)
+            
+            Shell ("C:\norpca\timerlabel\brotherLabel.exe " + time + " " + personName + " " + runInstance + " " + entrantNum)
+            
+            
+        End If
+        
+End Sub
+
+
