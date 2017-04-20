@@ -12,3 +12,5 @@ C:\Users\gjh\Documents\GitHub\TimerLabel\brotherLabel\brotherLabel\obj\x86\Relea
 C:\Users\gjh\Documents\GitHub\TimerLabel\brotherLabel\brotherLabel\obj\x86\Release\brotherLabel.exe
 C:\Users\gjh\Documents\GitHub\TimerLabel\brotherLabel\brotherLabel\obj\x86\Release\brotherLabel.pdb
 C:\Users\gjh\Documents\GitHub\TimerLabel\brotherLabel\brotherLabel\obj\x86\Release\brotherLabel.csprojResolveAssemblyReference.cache
+C:\Users\gjh\Documents\GitHub\TimerLabel\brotherLabel\brotherLabel\bin\x86\Release\brotherLabel.exe
+C:\Users\gjh\Documents\GitHub\TimerLabel\brotherLabel\brotherLabel\bin\x86\Release\brotherLabel.pdb

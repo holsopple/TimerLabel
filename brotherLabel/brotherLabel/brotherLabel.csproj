@@ -52,10 +52,35 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>com.holsopple.BrotherLabel.LabelProcess</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LinqToTwitter.AspNet, Version=3.2.0.40326, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\linqtotwitter.4.2.0-beta2\lib\net45\LinqToTwitter.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqToTwitter.net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=957107be965c25d9, processorArchitecture=MSIL">
+      <HintPath>..\packages\linqtotwitter.4.2.0-beta2\lib\net45\LinqToTwitter.net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -67,9 +92,13 @@
     <Compile Include="AutoCrossRun.cs" />
     <Compile Include="LabelProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TweetController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
     <None Include="trace.log" />
   </ItemGroup>
   <ItemGroup>

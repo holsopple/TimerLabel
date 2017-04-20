@@ -1,0 +1,7 @@
+C:\Users\gjh\Documents\GitHub\TimerLabel\brotherLabel\brotherLabel\bin\x86\Debug\brotherLabel.exe.config
+C:\Users\gjh\Documents\GitHub\TimerLabel\brotherLabel\brotherLabel\obj\x86\Debug\Interop.bpac.dll
+C:\Users\gjh\Documents\GitHub\TimerLabel\brotherLabel\brotherLabel\obj\x86\Debug\brotherLabel.csproj.ResolveComReference.cache
+C:\Users\gjh\Documents\GitHub\TimerLabel\brotherLabel\brotherLabel\bin\x86\Debug\brotherLabel.exe
+C:\Users\gjh\Documents\GitHub\TimerLabel\brotherLabel\brotherLabel\bin\x86\Debug\brotherLabel.pdb
+C:\Users\gjh\Documents\GitHub\TimerLabel\brotherLabel\brotherLabel\obj\x86\Debug\brotherLabel.exe
+C:\Users\gjh\Documents\GitHub\TimerLabel\brotherLabel\brotherLabel\obj\x86\Debug\brotherLabel.pdb
