@@ -1,56 +1,44 @@
-﻿using System;
+﻿using bpac;
+using System;
 using System.Configuration;
 using System.Diagnostics;
-using bpac;
-using LinqToTwitter;
 using System.Threading.Tasks;
 
 namespace com.holsopple.BrotherLabel
 
 {
-    class AutoCrossRun
+
+    /*
+     * dependent on brother printer api
+     * https://support.brother.com/g/s/es/dev/en/bpac/download/index.html?c=eu_ot&lang=en&navi=offall&comple=on&redirect=on
+     * this is BPAC
+     */
+
+
+    internal class AutoCrossRun
     {
-        #region variables
-
-        string runTime;
-        string personName;
-        string runInstance;
-        string entrantNum;
-        string classCode;
-        string netTime;
-        string penaltyCount;
-        string hashtag;
-        string userMention;
-
-
-        #endregion
-
         #region GettersSetters
-        
-        public string Hashtag { get => hashtag; set => hashtag = value; }
-        public string UserMention { get => userMention; set => userMention = value; }
-        public string PenaltyCount { get => penaltyCount; set => penaltyCount = value; }
-        public string NetTime { get => netTime; set => netTime = value; }
-        public string ClassCode { get => classCode; set => classCode = value; }
-        public string EntrantNum { get => entrantNum; set => entrantNum = value; }
-        public string RunInstance { get => runInstance; set => runInstance = value; }
-        public string PersonName { get => personName; set => personName = value; }
-        public string RunTime { get => runTime; set => runTime = value; }
-
+        public string Hashtag { get; set; }
+        public string UserMention { get; set; }
+        public string PenaltyCount { get; set; }
+        public string NetTime { get; set; }
+        public string ClassCode { get; set; }
+        public string EntrantNum { get; set; }
+        public string RunInstance { get; set; }
+        public string PersonName { get; set; }
+        public string RunTime { get; set; }
         #endregion
 
 
-        public async Task doTweet()
+        public async Task DoTweet()
         {
-            String status;
-            Task resultTask;
             try
             {
-                status = String.Format("Car: {0} \n Name: {1}\n Run: {2}\n Time: {3}\n Penalty: {4}\n Net Time: {5}\n Class:{6} \n {7} {8}", EntrantNum, PersonName, RunInstance, RunTime, PenaltyCount, NetTime, ClassCode, Hashtag, UserMention);
-                TweetController tweet = new TweetController();
-                resultTask = tweet.Tweet(status);
+                var status =
+                    $"Car: {EntrantNum} \n Name: {PersonName}\n Run: {RunInstance}\n Time: {RunTime}\n Penalty: {PenaltyCount}\n Net Time: {NetTime}\n Class:{ClassCode} \n {Hashtag} {UserMention}";
+                var tweet = new TweetController();
+                var resultTask = tweet.Tweet(status);
                 resultTask.Wait();
-
             }
             catch (Exception ex)
             {
@@ -59,10 +47,9 @@ namespace com.holsopple.BrotherLabel
             }
         }
 
-        public void processPrint()
+        public void ProcessPrint()
         {
-            Boolean returnValue = false;
-            String templatePath = ConfigurationManager.AppSettings["templatePath"];
+            var templatePath = ConfigurationManager.AppSettings["templatePath"];
 
 
             if (String.IsNullOrEmpty(templatePath))
@@ -72,9 +59,9 @@ namespace com.holsopple.BrotherLabel
 
             }
 
-            bpac.Document doc = new Document();
-            bpac.Printer printer = new Printer();
-            if (doc.Open(templatePath) != false)
+            var doc = new Document();
+        //    var printer = new Printer();
+            if (doc.Open(templatePath))
             {
                 doc.GetObject("objRunTime").Text = RunTime;
                 doc.GetObject("objPersonName").Text = PersonName;
@@ -84,7 +71,7 @@ namespace com.holsopple.BrotherLabel
                 doc.GetObject("objPenaltyCount").Text = PenaltyCount;
                 doc.GetObject("objNetTime").Text = NetTime;
 
-                returnValue = doc.StartPrint("", PrintOptionConstants.bpoDefault);
+                var returnValue = doc.StartPrint("", PrintOptionConstants.bpoDefault);
                 Trace.TraceInformation("startProject:" + returnValue);
 
                 returnValue = doc.PrintOut(1, PrintOptionConstants.bpoDefault);

@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Globalization;
+//using System.Threading.Tasks;
 
 
 namespace com.holsopple.BrotherLabel
 {
-    class LabelProcess
+    internal class LabelProcess
     {
-
-
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
 
             /*
@@ -16,7 +15,7 @@ namespace com.holsopple.BrotherLabel
              *Shell ("C:\GaryStuff\norpca\timerlabel\brotherLabel.exe " + runTime + " " + personName + " " + runInstance + " " + entrantNum + " " + classCode + " " + netTime + " " + penaltyCount)
              */
 
-            Task result;
+            //Task result;
 
             if (args != null && args.Length == 1 && args[0].ToUpper() == "RESET")
             {
@@ -24,14 +23,17 @@ namespace com.holsopple.BrotherLabel
                 return;
             }
 
-            if (args != null && args.Length == 1 && args[0].ToUpper() == "TESTTWEET")
+            if (args != null && args.Length == 1 && (args[0].ToUpper() == "TESTTWEET" || args[0].ToUpper() == "TEST"))
             {
                 // run a test tweet
-                AutoCrossRun run = new AutoCrossRun();
-                run.PersonName = args[0];
-                run.EntrantNum = Convert.ToString(new Random().Next());
-                run.RunTime = Convert.ToString(DateTime.Now);
-                result = run.doTweet();
+                var run = new AutoCrossRun
+                {
+                    PersonName = args[0],
+                    EntrantNum = Convert.ToString(new Random().Next()),
+                    RunTime = Convert.ToString(DateTime.Now, CultureInfo.CurrentCulture)
+                };
+                //result = 
+                    run.DoTweet();
                 Console.WriteLine(run.PersonName);
                 return;
             }
@@ -44,20 +46,23 @@ namespace com.holsopple.BrotherLabel
             }
 
             // marshal the object
-            AutoCrossRun aRun = new AutoCrossRun();
-            aRun.RunTime = (args[0] != null) ? args[0] : "no runtime";
-            aRun.PersonName = (args[1] != null) ? args[1] : "no person name";
-            aRun.RunInstance = (args[2] != null) ? args[2] : "no run instance";
-            aRun.EntrantNum = (args[3] != null) ? args[3] : "no entrant number";
-            aRun.ClassCode = (args[4] != null) ? args[4] : "no class code";
-            aRun.NetTime = (args[5] != null) ? args[5] : "no net time";
-            aRun.PenaltyCount = (args[6] != null) ? args[6] : "no penalty count";
-            aRun.Hashtag = ((args.Length >= 8) && (args[7] != null)) ? args[7] : " ";
-            aRun.UserMention = ((args.Length >= 9) && (args[8] != null)) ? args[8] : " ";
+            var aRun = new AutoCrossRun
+            {
+                RunTime = args[0] ?? "no runtime",
+                PersonName = args[1] ?? "no person name",
+                RunInstance = args[2] ?? "no run instance",
+                EntrantNum = args[3] ?? "no entrant number",
+                ClassCode = args[4] ?? "no class code",
+                NetTime = args[5] ?? "no net time",
+                PenaltyCount = args[6] ?? "no penalty count",
+                Hashtag = ((args.Length >= 8) && (args[7] != null)) ? args[7] : " ",
+                UserMention = ((args.Length >= 9) && (args[8] != null)) ? args[8] : " "
+            };
 
 
-            aRun.processPrint();
-            result = aRun.doTweet();
+            aRun.ProcessPrint();
+            //result = 
+                aRun.DoTweet();
 
 
         }

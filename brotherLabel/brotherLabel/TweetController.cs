@@ -1,8 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using LinqToTwitter;
+﻿using LinqToTwitter;
+using System;
 using System.Configuration;
+using System.Diagnostics;
+using System.Globalization;
+using System.Threading.Tasks;
 
 /******************************************************************************
  * Copyright Holsopple 2017                                                    *
@@ -24,26 +25,28 @@ using System.Configuration;
 
 namespace com.holsopple.BrotherLabel
 {
-    class TweetController
+    internal class TweetController
     {
-        static IAuthorizer auth;
+        private static IAuthorizer _auth;
+        private static readonly string ConsumerKey = ConfigurationManager.AppSettings["ConsumerKey"]; //Environment.GetEnvironmentVariable(OAuthKeys.TwitterConsumerKey);
+        private static readonly string ConsumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];//Environment.GetEnvironmentVariable(OAuthKeys.TwitterConsumerSecret);
 
-        public async Task Tweet(String status)
+
+        public async Task Tweet(string status)
         {
             try
             {
-
-                Task authTask = DoAuthAsync();
+                var authTask = DoAuthAsync();
                 authTask.Wait();
 
-                if (auth == null) throw new Exception("auth object null");
+                if (_auth == null) throw new Exception("auth object null");
 
-                var twitterCtx = new TwitterContext(auth);
+                var twitterCtx = new TwitterContext(_auth);
 
                 Trace.TraceInformation(status);
                 Trace.Flush();
 
-                Status tweet = await twitterCtx.TweetAsync(status);
+                var tweet = await twitterCtx.TweetAsync(status);
 
                 Trace.TraceInformation("success:" + tweet.CreatedAt);
 
@@ -57,61 +60,53 @@ namespace com.holsopple.BrotherLabel
             }
         }
 
-
-        static async Task DoAuthAsync()
+        private static async Task DoAuthAsync()
         {
-
             ICredentialStore credentials;
-            string oauthToken;
-            string oauthTokenSecret;
-            string screenName;
-            ulong userID;
 
-
-            String authDateTimeString = ConfigurationManager.AppSettings["AuthDate"];
-            DateTime authDateTime;
+            var authDateTimeString = ConfigurationManager.AppSettings["AuthDate"];
 
             if (authDateTimeString != null && authDateTimeString.Length > 1)
             {
-                authDateTime = Convert.ToDateTime(authDateTimeString);
+                var authDateTime = Convert.ToDateTime(authDateTimeString);
                 if (authDateTime == DateTime.Today)
                 {
                     // we authorized today.  don't need to reauth. 
                     // load from app settings 
-                    oauthToken = ConfigurationManager.AppSettings["oauthToken"];
-                    oauthTokenSecret = ConfigurationManager.AppSettings["oauthTokenSecret"];
-                    screenName = ConfigurationManager.AppSettings["screenName"];
-                    userID = Convert.ToUInt64(ConfigurationManager.AppSettings["userID"]);
+
 
                     // repopulate credentials. 
 
-                    credentials = new InMemoryCredentialStore();
-                    credentials.ConsumerKey = Environment.GetEnvironmentVariable(OAuthKeys.TwitterConsumerKey);
-                    credentials.ConsumerSecret = Environment.GetEnvironmentVariable(OAuthKeys.TwitterConsumerSecret);
-                    credentials.OAuthToken = oauthToken;
-                    credentials.OAuthTokenSecret = oauthTokenSecret;
-                    credentials.ScreenName = screenName;
-                    credentials.UserID = userID;
-                    auth = new SingleUserAuthorizer();
-                    auth.CredentialStore = credentials;
+                    credentials = new InMemoryCredentialStore
+                    {
+                        ConsumerKey = ConsumerKey,
+                        ConsumerSecret = ConsumerSecret,
+                        OAuthToken = ConfigurationManager.AppSettings["oauthToken"],
+                        OAuthTokenSecret = ConfigurationManager.AppSettings["oauthTokenSecret"],
+                        ScreenName = ConfigurationManager.AppSettings["screenName"],
+                        UserID = Convert.ToUInt64(ConfigurationManager.AppSettings["userID"])
+                    };
+                    _auth = new SingleUserAuthorizer {CredentialStore = credentials};
                     return;
                 }
             }
 
             // else fall through
 
-            auth = DoPinOAuth();
-            await auth.AuthorizeAsync();
+            _auth = DoPinOAuth();
+            await _auth.AuthorizeAsync();
 
             // write stuff to config. 
-            credentials = auth.CredentialStore;
+            credentials = _auth.CredentialStore;
 
-            System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            config.AppSettings.Settings["oauthToken"].Value= credentials.OAuthToken;
-            config.AppSettings.Settings["oauthTokenSecret"].Value= credentials.OAuthTokenSecret;
-            config.AppSettings.Settings["screenName"].Value=credentials.ScreenName;
-            config.AppSettings.Settings["userID"].Value= Convert.ToString(credentials.UserID);
-            config.AppSettings.Settings["AuthDate"].Value=Convert.ToString(DateTime.Today);
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            //  config.AppSettings.Settings["ConsumerKey"].Value = credentials.ConsumerKey;
+            //  config.AppSettings.Settings["ConsumerSecret"].Value = credentials.ConsumerSecret;
+            config.AppSettings.Settings["oauthToken"].Value = credentials.OAuthToken;
+            config.AppSettings.Settings["oauthTokenSecret"].Value = credentials.OAuthTokenSecret;
+            config.AppSettings.Settings["screenName"].Value = credentials.ScreenName;
+            config.AppSettings.Settings["userID"].Value = Convert.ToString(credentials.UserID);
+            config.AppSettings.Settings["AuthDate"].Value = Convert.ToString(DateTime.Today, CultureInfo.CurrentCulture);
             //save to apply changes
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
@@ -124,14 +119,14 @@ namespace com.holsopple.BrotherLabel
             // When you've loaded all 4 credentials, LINQ to Twitter will let you make queries without re-authorizing.
         }
 
-        static IAuthorizer DoPinOAuth()
+        private static IAuthorizer DoPinOAuth()
         {
             var auth = new PinAuthorizer()
             {
                 CredentialStore = new InMemoryCredentialStore
                 {
-                    ConsumerKey = Environment.GetEnvironmentVariable(OAuthKeys.TwitterConsumerKey),
-                    ConsumerSecret = Environment.GetEnvironmentVariable(OAuthKeys.TwitterConsumerSecret)
+                    ConsumerKey = ConsumerKey,
+                    ConsumerSecret = ConsumerSecret
                 },
                 GoToTwitterAuthorization = pageLink => Process.Start(pageLink),
                 GetPin = () =>
@@ -152,7 +147,7 @@ namespace com.holsopple.BrotherLabel
         public static void ResetAuthorization()
         {
 
-            System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             config.AppSettings.Settings["oauthToken"].Value = "";
             config.AppSettings.Settings["oauthTokenSecret"].Value = "";
             config.AppSettings.Settings["screenName"].Value = "";

@@ -4,6 +4,7 @@
     <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5.2" />
   </startup>
 
+  <!-- https://developer.twitter.com/en/apps -->
 
   <system.diagnostics>
     <trace autoflush="false" indentsize="4">
@@ -16,17 +17,12 @@
 
   <appSettings>
     <add key="templatePath" value="C:\GaryStuff\norpca\timerlabel\timerlabel.lbx"/>
-	<add key ="ConsumerKey" value="Yq4p78uSdKPbkCoRZvFT3eESV"/>
-    <add key ="ConsumerSecret" value="81NBkw3QzgBsB5Ai3H0hb8eUcZ3vCJor1L9ywsQtQ60Wjfmvbg"/>
-    <add key="oauthTokenSecret" value="4Id2O7tBAHsbj9tBe2ayGPOqJQGckuAxdowgI50iJq6NF"/>
-    <add key="screenName" value="norpca"/>
-    <add key="oauthToken" value="826214588119126017-kY1agOM8YLgSbw42ZSfh3ODGSVD46Gf"/>
-    <add key="userID" value="@norpca"/>
+    <add key ="ConsumerKey" value=""/>
+    <add key ="ConsumerSecret" value=""/>
+    <add key="oauthTokenSecret" value=""/>
+    <add key="screenName" value=""/>
+    <add key="oauthToken" value=""/>
+    <add key="userID" value=""/>
     <add key="AuthDate" value=""/>
   </appSettings>
-
-
-
-
-
 </configuration>
